@@ -65,7 +65,7 @@ function saveProgress() {
 		progress[id] = checked;
 	}
 
-	Cookies.set('progress', progress);
+	Cookies.set('progress', progress, { expires: 20 * 365 });
 }
 
 function countProgress() {
@@ -101,7 +101,7 @@ function initCookieAlert() {
 	if(! hiddenCookieAlert) {
 		document.getElementById("hideCookieAlert").addEventListener('click', function(event) {
 			event.preventDefault();
-			Cookies.set('hideCookieAlert', true);
+			Cookies.set('hideCookieAlert', true, { expires: 20 * 365 });
 			document.getElementById("cookieAlert").style['display'] = 'none';
 		});
 	} else {
