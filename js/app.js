@@ -13,13 +13,18 @@ function init() {
 function reloadProgress() {
 	var progress = Cookies.get('progress');
 
-	if(progress && progress.length){
-		progress = JSON.parse(progress);
+	if (progress && progress.length) {
+		try {
+			progress = JSON.parse(progress);
+		} catch (err) {
+			console.error("failed loading progress: failed to parse JSON. no progress will be loaded");
+			return;
+		}
 
-		for(var id in progress) {
-			if(progress[id] == 1) {
+		for (var id in progress) {
+			if (progress[id] == 1) {
 				var el = document.querySelector("input[data-key='" + id + "']");
-				
+
 				el.checked = true;
 			}
 		}
@@ -28,7 +33,7 @@ function reloadProgress() {
 
 function listenForProgress() {
 	for (var i = checkboxes.length - 1; i >= 0; i--) {
-		checkboxes[i].addEventListener('change', function(event) {
+		checkboxes[i].addEventListener('change', function (event) {
 			var id = event.target.getAttribute('id');
 			saveProgress();
 			countProgress();
@@ -36,7 +41,7 @@ function listenForProgress() {
 		});
 	}
 
-	document.getElementById("uncheckAll").addEventListener('click', function(event) {
+	document.getElementById("uncheckAll").addEventListener('click', function (event) {
 		event.preventDefault();
 
 		for (var i = checkboxes.length - 1; i >= 0; i--) {
@@ -56,7 +61,7 @@ function saveProgress() {
 		var checked = checkboxes[i].checked;
 		var id = checkboxes[i].getAttribute('data-key');
 
-		if(checked == true) {
+		if (checked == true) {
 			checked = 1;
 		} else {
 			checked = 0;
@@ -75,31 +80,31 @@ function countProgress() {
 		var checked = checkboxes[i].checked;
 		var id = checkboxes[i].getAttribute('data-key');
 
-		if(checked == true) {
+		if (checked == true) {
 			a -= 1;
 		}
 
 		document.getElementById("amountRemaining").innerHTML = a;
 	}
 
-	if(a == 0) {
-		document.getElementById("congrats").style["display"] = "inline"; 
+	if (a == 0) {
+		document.getElementById("congrats").style["display"] = "inline";
 	} else {
-		document.getElementById("congrats").style["display"] = ""; 
+		document.getElementById("congrats").style["display"] = "";
 	}
 
-	if(a < checkboxes.length) {
-		document.getElementById("uncheckAll").style["display"] = "inline"; 
+	if (a < checkboxes.length) {
+		document.getElementById("uncheckAll").style["display"] = "inline";
 	} else {
-		document.getElementById("uncheckAll").style["display"] = ""; 
+		document.getElementById("uncheckAll").style["display"] = "";
 	}
 }
 
 function initCookieAlert() {
 	var hiddenCookieAlert = Cookies.get('hideCookieAlert');
 
-	if(! hiddenCookieAlert) {
-		document.getElementById("hideCookieAlert").addEventListener('click', function(event) {
+	if (!hiddenCookieAlert) {
+		document.getElementById("hideCookieAlert").addEventListener('click', function (event) {
 			event.preventDefault();
 			Cookies.set('hideCookieAlert', true, { expires: 20 * 365 });
 			document.getElementById("cookieAlert").style['display'] = 'none';
@@ -112,7 +117,7 @@ function initCookieAlert() {
 function updatePercentage() {
 	var percent = 0;
 	for (var i = checkboxes.length - 1; i >= 0; i--) {
-		if(checkboxes[i].checked) {
+		if (checkboxes[i].checked) {
 			percent += (checkboxes[i].getAttribute('data-percent') * 1);
 		}
 	}
@@ -121,7 +126,7 @@ function updatePercentage() {
 	percentElement = document.getElementById("percent");
 
 	percentElement.innerHTML = percent + '% <small>done</small>';
-	if(percent == 112) {
+	if (percent == 112) {
 		percentElement.className = "complete";
 	} else {
 		percentElement.className = "";
