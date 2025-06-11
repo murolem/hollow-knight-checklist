@@ -148,6 +148,9 @@
 
 var checkboxes;
 
+const localStorageBaseKey = "hk-checklist";
+const localStorageProgressKey = `${localStorageBaseKey}-progress`;
+
 function init() {
 	checkboxes = document.querySelectorAll("input[type='checkbox']");
 	reloadProgress();
@@ -159,22 +162,24 @@ function init() {
 }
 
 function reloadProgress() {
-	var progress = Cookies.get('progress');
+	const progressStr = localStorage.getItem(localStorageProgressKey);
+	if (progressStr === null) {
+		return;
+	}
 
-	if (progress && progress.length) {
-		try {
-			progress = JSON.parse(progress);
-		} catch (err) {
-			console.error("failed loading progress: failed to parse JSON. no progress will be loaded");
-			return;
-		}
+	let progress;
+	try {
+		progress = JSON.parse(progressStr);
+	} catch (err) {
+		console.error("failed loading progress: failed to parse JSON. no progress will be loaded");
+		return;
+	}
 
-		for (var id in progress) {
-			if (progress[id] == 1) {
-				var el = document.querySelector("input[data-key='" + id + "']");
+	for (var id in progress) {
+		if (progress[id] == 1) {
+			var el = document.querySelector("input[data-key='" + id + "']");
 
-				el.checked = true;
-			}
+			el.checked = true;
 		}
 	}
 }
@@ -218,7 +223,7 @@ function saveProgress() {
 		progress[id] = checked;
 	}
 
-	Cookies.set('progress', progress, { expires: 20 * 365 });
+	localStorage.setItem(localStorageProgressKey, JSON.stringify(progress));
 }
 
 function countProgress() {
