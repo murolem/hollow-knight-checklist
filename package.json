@@ -4,6 +4,7 @@
   "description": "A website which provides visitors with a completion checklist for Hollow Knight.",
   "main": "gulpfile.js",
   "scripts": {
+    "build": "gulp build",
     "dev": "gulp && gulp watch"
   },
   "keywords": [
