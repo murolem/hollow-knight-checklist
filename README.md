@@ -2,7 +2,7 @@
 
 A website which provides visitors with a completion checklist for Hollow Knight. View it on https://murolem.github.io/hollow-knight-checklist
 
-Fork: This fork includes fixes to make the progress between tab/browser closes.
+Fork: This fork includes fixes to save progress between tab/browser closes.
 
 ## What is this?
 
